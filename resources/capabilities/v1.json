@@ -1,0 +1,66 @@
+{
+  "schema": "kumwe-package-capabilities/v1",
+  "package": "kumwe/sequence",
+  "release": "0.1.0",
+  "namespace": "Kumwe\\Sequence\\",
+  "responsibility": "Portable document numbering: the format, reset and scope a numbered field declares, the storage-neutral allocator port and its one refusal.",
+  "non_responsibilities": [
+    "Any allocator implementation: the counter store, its transaction, its locks and fencing, deadlock retry and unique constraints stay in the host.",
+    "Business numbering policy: which documents are numbered, what an invoice or stock number is, and when a run may be repaired are the host's and its extensions'.",
+    "A fiscal calendar: a fiscal-period key is a posting period the host declared; this package only renders the key it is handed.",
+    "Site and organization authority: the record scope a counter is keyed by is resolved and enforced by the host.",
+    "Container registration: values, enums, the port and the refusal are constructed directly; the host binds its adapter to the port identifier and there is no provider.",
+    "Real-database evidence, which the host proves on the engines it supports."
+  ],
+  "capabilities": [
+    {
+      "id": "sequence.format",
+      "title": "Number format declaration and rendering",
+      "description": "Read a numbered field's declaration into a validated value with a closed grammar and fixed bounds, name the counter it draws from, and render an allocated value deterministically.",
+      "symbols": [
+        "Kumwe\\Sequence\\Value\\NumberSequenceFormat"
+      ],
+      "documentation": [
+        "docs/public-api.md",
+        "docs/integration.md"
+      ]
+    },
+    {
+      "id": "sequence.reset",
+      "title": "Reset period vocabulary and period keys",
+      "description": "The calendar boundary a run restarts at, and the period key an instant maps to in the declared zone; the fiscal-period case defers to the host's declared posting periods.",
+      "symbols": [
+        "Kumwe\\Sequence\\Value\\NumberSequenceReset"
+      ],
+      "documentation": [
+        "docs/public-api.md"
+      ]
+    },
+    {
+      "id": "sequence.scope",
+      "title": "Tenancy scope vocabulary and scope keys",
+      "description": "The tenancy boundary a run is unique and contiguous within, and the closed scope-key grammar that keeps one tenant out of another's counter.",
+      "symbols": [
+        "Kumwe\\Sequence\\Value\\NumberSequenceScope"
+      ],
+      "documentation": [
+        "docs/public-api.md"
+      ]
+    },
+    {
+      "id": "sequence.allocation",
+      "title": "Allocator port and its one refusal",
+      "description": "The storage-neutral port that reserves the next value of one counter inside the caller's transaction with a gapless-on-commit promise, and the one canonical refusal an allocation answers with; the package ships no implementation of the port.",
+      "symbols": [
+        "Kumwe\\Sequence\\Contract\\NumberSequenceAllocator",
+        "Kumwe\\Sequence\\Exception\\NumberSequenceUnavailable"
+      ],
+      "documentation": [
+        "docs/public-api.md",
+        "docs/integration.md"
+      ]
+    }
+  ],
+  "native_requirements": null,
+  "deprecations": []
+}
