@@ -45,10 +45,11 @@ final class NumberSequenceResetTest extends TestCase
      */
     public function testALifetimeRunHasAnEmptyKeyEverywhere(): void
     {
+        $lastSecondOfTheYear = new DateTimeImmutable('2026-12-31T23:59:59+00:00');
         foreach (['UTC', 'Africa/Windhoek', 'Pacific/Kiritimati', 'America/Los_Angeles'] as $zone) {
             $this->assertSame(
                 '',
-                NumberSequenceReset::Never->key(new DateTimeImmutable('2026-12-31T23:59:59+00:00'), new DateTimeZone($zone)),
+                NumberSequenceReset::Never->key($lastSecondOfTheYear, new DateTimeZone($zone)),
                 'Never has no period segment in ' . $zone . '.',
             );
         }

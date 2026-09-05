@@ -166,7 +166,7 @@ final class NumberSequenceFormatTest extends TestCase
      */
     public function testTheBoundsAreTheDocumentedOnes(): void
     {
-        $this->assertSame(12, NumberSequenceFormat::MAXIMUM_PADDING, 'Twelve digits stay inside a signed 64-bit value.');
+        $this->assertSame(12, NumberSequenceFormat::MAXIMUM_PADDING, 'Twelve digits fit a signed 64-bit value.');
         $this->assertSame(16, NumberSequenceFormat::MAXIMUM_PREFIX, 'Sixteen prefix characters.');
         $this->assertSame(
             36,
@@ -257,7 +257,8 @@ final class NumberSequenceFormatTest extends TestCase
      */
     public function testThePrefixGrammarAdmitsExactlyUpperCaseDigitsHyphenAndSlash(): void
     {
-        foreach (['', 'INV-', 'DN/', '2026/', 'A-B/C-9', str_repeat('Z', NumberSequenceFormat::MAXIMUM_PREFIX)] as $prefix) {
+        $prefixes = ['', 'INV-', 'DN/', '2026/', 'A-B/C-9', str_repeat('Z', NumberSequenceFormat::MAXIMUM_PREFIX)];
+        foreach ($prefixes as $prefix) {
             $this->assertSame(
                 $prefix,
                 NumberSequenceFormat::fromConfiguration(['prefix' => $prefix])->prefix,
@@ -417,6 +418,7 @@ final class NumberSequenceFormatTest extends TestCase
         $this->assertTrue($reflection->isFinal(), 'The value is final.');
         $this->assertTrue($reflection->isReadOnly(), 'The value is read-only.');
         $this->assertSame(['scope', 'reset', 'prefix', 'padding', 'timezone'], $names, 'The public coordinates.');
-        $this->assertFalse($reflection->getConstructor()?->isPublic() ?? true, 'Construction goes through the factory.');
+        $constructor = $reflection->getConstructor();
+        $this->assertFalse($constructor?->isPublic() ?? true, 'Construction goes through the factory.');
     }
 }

@@ -25,13 +25,14 @@ it. The host owns the rules that need its own vocabulary and keeps them beside t
 | Rule | Owner | Why |
 | --- | --- | --- |
 | grammar, bounds, defaults of `scope`, `reset`, `prefix`, `padding`, `timezone` | package | the number's meaning |
-| the field is server-only, read-only, immutable after create, undefaulted, required, unique, not computed | host | the field is reserved by the allocator |
 | the column is at least `NumberSequenceFormat::MAXIMUM_LENGTH` wide | host | no rendered number can outgrow it |
-| `organization` scope only on an entity whose scope mode carries an organization | host | the counter must have something to key on |
+| `organization` scope only where the entity's scope mode carries an organization | host | the counter needs a key |
 | `fiscal-period` reset only beside a declared posting-date field | host | the period key comes from the posting date |
 
-Kumwe App keeps every rule in the right-hand column in `BusinessDefinitionValidator::validateSequence()`
-and its neighbours; they read the package constants and cases and stay in the App.
+The host also requires the numbered field itself to be server-only, read-only, immutable after create,
+undefaulted, required, unique and not computed, because the allocator fills it and nothing else may. Kumwe
+App keeps every host rule in `BusinessDefinitionValidator::validateSequence()` and its neighbours; they read
+the package constants and cases and stay in the App.
 
 ## 3. Compose the values with the port in a record command (host)
 
@@ -62,13 +63,13 @@ tests must prove on every engine the host supports:
 
 | Promise | What the host proves |
 | --- | --- |
-| Committed records are numbered contiguously from one per counter | interleaved creates on one counter, then a gap-free run |
+| Committed records run contiguously from one per counter | interleaved creates on one counter, then a gap-free run |
 | A rolled-back command consumes nothing | a refused create, then the next create gets the returned number |
 | A replayed idempotent command allocates nothing | a replay returns the stored number and the counter stands still |
-| The allocation joins the caller's transaction and never opens its own | allocation outside a transaction is refused by the adapter |
-| The counter is held exclusively until the transaction ends | two connections: the second waits, or times out into a refusal |
+| The allocation joins the caller's transaction, never its own | allocation outside a transaction is refused |
+| The counter is held exclusively until the transaction ends | a second connection waits or times out into a refusal |
 | Every coordinate isolates its own run | site, definition, field, scope and period neighbours each start at one |
-| Contention is one refusal at the port | lock wait, deadlock, first-use race and lost compare-and-set all raise `NumberSequenceUnavailable` |
+| Contention is one refusal at the port | lock wait, deadlock, first-use race, lost compare-and-set: each raises it |
 | The driver's own class stays reachable | `getPrevious()` of the refusal is the translated driver failure |
 
 Kumwe App's `DoctrineBusinessNumberSequenceAllocator` takes the counter row `FOR UPDATE` and advances it with

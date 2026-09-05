@@ -7,6 +7,7 @@ namespace Kumwe\Sequence\Tests\Case;
 use DateTimeImmutable;
 use Kumwe\Sequence\Contract\NumberSequenceAllocator;
 use Kumwe\Sequence\Exception\NumberSequenceUnavailable;
+use Kumwe\Sequence\Tests\Support\ReferenceNumberSequenceAllocator;
 use Kumwe\Sequence\Tests\TestCase;
 use Kumwe\Sequence\Value\NumberSequenceFormat;
 use ReflectionClass;
@@ -14,7 +15,7 @@ use ReflectionNamedType;
 
 /**
  * Pins the shape and the documented promises of the allocator port, and proves the port is implementable
- * without any host type by holding an in-memory reference to the same promises.
+ * without any host type by holding the suite's in-memory reference to the same promises.
  *
  * @since  0.1.0
  */
@@ -99,7 +100,7 @@ final class NumberSequenceAllocatorContractTest extends TestCase
         $at = new DateTimeImmutable('2026-03-01T00:00:00+00:00');
 
         $this->assertSame(1, $allocator->allocate('site', 'invoice', 'number', '-', '2026', $at), 'Runs start at one.');
-        $this->assertSame(2, $allocator->allocate('site', 'invoice', 'number', '-', '2026', $at), 'Then advance by one.');
+        $this->assertSame(2, $allocator->allocate('site', 'invoice', 'number', '-', '2026', $at), 'Advance by one.');
         $this->assertSame(1, $allocator->allocate('other', 'invoice', 'number', '-', '2026', $at), 'Another site.');
         $this->assertSame(1, $allocator->allocate('site', 'quotation', 'number', '-', '2026', $at), 'Another type.');
         $this->assertSame(1, $allocator->allocate('site', 'invoice', 'reference', '-', '2026', $at), 'Another field.');
@@ -147,7 +148,14 @@ final class NumberSequenceAllocatorContractTest extends TestCase
         $counter = $format->counter(null, $at);
         $rendered = [];
         for ($issued = 0; $issued < 3; $issued++) {
-            $value = $allocator->allocate('site', 'invoice', 'invoice_number', $counter['scope'], $counter['period'], $at);
+            $value = $allocator->allocate(
+                'site',
+                'invoice',
+                'invoice_number',
+                $counter['scope'],
+                $counter['period'],
+                $at,
+            );
             $rendered[] = $format->render($value, $counter['period']);
         }
 
@@ -175,91 +183,14 @@ final class NumberSequenceAllocatorContractTest extends TestCase
     }
 
     /**
-     * An in-memory allocator that keeps the documented promises for one process; test support only.
+     * The in-memory reference allocator from the test support tree, fresh for one test.
      *
-     * @return  NumberSequenceAllocator&object{hold: callable(string): void, release: callable(string): void}
+     * @return  ReferenceNumberSequenceAllocator  An allocator with no counters and nothing held.
      *
      * @since   0.1.0
      */
-    private function reference(): NumberSequenceAllocator
+    private function reference(): ReferenceNumberSequenceAllocator
     {
-        return new class implements NumberSequenceAllocator {
-            /**
-             * Last value handed out per counter, keyed by the joined coordinates.
-             *
-             * @var    array<string, int>
-             * @since  0.1.0
-             */
-            private array $counters = [];
-
-            /**
-             * Counters currently held by another allocator, keyed by the joined coordinates.
-             *
-             * @var    array<string, true>
-             * @since  0.1.0
-             */
-            private array $held = [];
-
-            /**
-             * Mark a counter as held elsewhere so the next allocation refuses.
-             *
-             * @param   string  $key  Joined coordinates.
-             *
-             * @return  void
-             *
-             * @since   0.1.0
-             */
-            public function hold(string $key): void
-            {
-                $this->held[$key] = true;
-            }
-
-            /**
-             * Release a held counter.
-             *
-             * @param   string  $key  Joined coordinates.
-             *
-             * @return  void
-             *
-             * @since   0.1.0
-             */
-            public function release(string $key): void
-            {
-                unset($this->held[$key]);
-            }
-
-            /**
-             * Reserve the next value, refusing while the counter is held.
-             *
-             * @param   string             $siteIdentifier  Site coordinate.
-             * @param   string             $definitionId    Definition coordinate.
-             * @param   string             $fieldHandle     Field coordinate.
-             * @param   string             $scopeKey        Scope coordinate.
-             * @param   string             $periodKey       Period coordinate.
-             * @param   DateTimeImmutable  $now             Ignored by the reference.
-             *
-             * @return  int  The reserved value.
-             *
-             * @throws  NumberSequenceUnavailable  While the counter is held.
-             *
-             * @since   0.1.0
-             */
-            public function allocate(
-                string $siteIdentifier,
-                string $definitionId,
-                string $fieldHandle,
-                string $scopeKey,
-                string $periodKey,
-                DateTimeImmutable $now,
-            ): int {
-                $key = implode('|', [$siteIdentifier, $definitionId, $fieldHandle, $scopeKey, $periodKey]);
-                if (isset($this->held[$key])) {
-                    throw new NumberSequenceUnavailable();
-                }
-                $this->counters[$key] = ($this->counters[$key] ?? 0) + 1;
-
-                return $this->counters[$key];
-            }
-        };
+        return new ReferenceNumberSequenceAllocator();
     }
 }

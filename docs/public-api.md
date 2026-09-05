@@ -30,9 +30,9 @@ Vocabulary used below:
 | Key or value | Grammar |
 | --- | --- |
 | scope key | `-` for `site`; the organization identifier, verbatim and non-empty, for `organization` |
-| period key | `` for `never`; `YYYY` for `yearly`; `YYYY-MM` for `monthly`; a host-declared posting-period key for `fiscal-period` |
-| reserved value | an integer of one or more; a value that pads wider than `MAXIMUM_PADDING` digits is refused at rendering |
-| rendered number | `prefix` `period` `-` `digits` (the hyphen only when a period segment is present); at most `MAXIMUM_LENGTH` (36) characters |
+| period key | `` for `never`; `YYYY` for `yearly`; `YYYY-MM` for `monthly`; a declared period key (`fiscal-period`) |
+| reserved value | an integer of one or more; one that pads past `MAXIMUM_PADDING` digits is refused at rendering |
+| rendered number | `prefix` `period` `-` `digits` (hyphen only with a period segment); at most `MAXIMUM_LENGTH` (36) |
 
 `MAXIMUM_LENGTH` is `MAXIMUM_PREFIX` + 8 + `MAXIMUM_PADDING`: the widest prefix, the widest calendar period
 segment (`YYYY-MM`) with its separator, and the widest padded value. A declared fiscal-period key counts
@@ -232,8 +232,10 @@ is irrelevant. The boundary is local midnight on 1 January (`Yearly`) or the fir
 **Example.**
 
 ```php
-NumberSequenceReset::Yearly->key(new DateTimeImmutable('2026-12-31T22:00:00+00:00'), new DateTimeZone('Africa/Windhoek'));
-// '2027'
+NumberSequenceReset::Yearly->key(
+    new DateTimeImmutable('2026-12-31T22:00:00+00:00'),
+    new DateTimeZone('Africa/Windhoek'),
+);   // '2027'
 ```
 
 ## `Kumwe\Sequence\Value\NumberSequenceScope`
@@ -312,7 +314,18 @@ break, never produce. The port is the primitive that produces it.
    `NumberSequenceUnavailable`, translating its driver's own contention class and keeping it as the previous
    exception.
 
-### `allocate(string $siteIdentifier, string $definitionId, string $fieldHandle, string $scopeKey, string $periodKey, DateTimeImmutable $now): int`
+### `allocate(string $siteIdentifier, string $definitionId, string $fieldHandle, string $scopeKey, …): int`
+
+```php
+public function allocate(
+    string $siteIdentifier,
+    string $definitionId,
+    string $fieldHandle,
+    string $scopeKey,
+    string $periodKey,
+    DateTimeImmutable $now,
+): int;
+```
 
 **Responsibility.** Reserve the next value of the counter the five coordinates name.
 
@@ -357,7 +370,9 @@ counter serialize on the adapter's hold; commands against different counters do 
 
 ```php
 $counter = $format->counter($scope->organizationIdentifier, $now);
-$value = $this->numbers->allocate($siteIdentifier, $definition->id, $field->handle, $counter['scope'], $counter['period'], $now);
+$value = $this->numbers->allocate(
+    $siteIdentifier, $definition->id, $field->handle, $counter['scope'], $counter['period'], $now,
+);
 $number = $format->render($value, $counter['period']);   // stored on the record in the same transaction
 ```
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kumwe\Sequence\Tests\Case;
 
-use InvalidArgumentException;
+use Exception;
 use Kumwe\Sequence\Exception\NumberSequenceUnavailable;
 use Kumwe\Sequence\Tests\TestCase;
 use LogicException;
@@ -28,10 +28,18 @@ final class NumberSequenceUnavailableTest extends TestCase
     public function testTheRefusalIsAFinalRuntimeExceptionWithAFixedMessage(): void
     {
         $refusal = new NumberSequenceUnavailable();
+        $reflection = new ReflectionClass($refusal);
+        $ancestry = [];
+        for ($ancestor = $reflection->getParentClass(); $ancestor !== false; $ancestor = $ancestor->getParentClass()) {
+            $ancestry[] = $ancestor->getName();
+        }
 
-        $this->assertTrue($refusal instanceof RuntimeException, 'A refusal is a runtime condition.');
-        $this->assertFalse($refusal instanceof InvalidArgumentException, 'It is never an argument error.');
-        $this->assertTrue((new ReflectionClass($refusal))->isFinal(), 'One canonical type, not a hierarchy.');
+        $this->assertSame(
+            [RuntimeException::class, Exception::class],
+            $ancestry,
+            'A refusal is a runtime condition directly under RuntimeException, never an argument error.',
+        );
+        $this->assertTrue($reflection->isFinal(), 'One canonical type, not a hierarchy.');
         $this->assertSame(
             'The number sequence counter is temporarily unavailable; replay the allocation.',
             $refusal->getMessage(),
