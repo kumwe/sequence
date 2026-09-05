@@ -1,0 +1,306 @@
+{
+    "schema": "kumwe-package-public-api/v1",
+    "package": "kumwe/sequence",
+    "release": "0.1.0",
+    "namespace": "Kumwe\\Sequence\\",
+    "symbols": {
+        "Kumwe\\Sequence\\Contract\\NumberSequenceAllocator": {
+            "kind": "interface",
+            "stability": "stable",
+            "file": "src/Contract/NumberSequenceAllocator.php",
+            "abstract": false,
+            "final": false,
+            "readonly": false,
+            "parent": null,
+            "interfaces": [],
+            "constants": {},
+            "properties": {},
+            "methods": {
+                "allocate": {
+                    "visibility": "public",
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "siteIdentifier",
+                            "type": "string",
+                            "optional": false,
+                            "variadic": false,
+                            "by_reference": false
+                        },
+                        {
+                            "name": "definitionId",
+                            "type": "string",
+                            "optional": false,
+                            "variadic": false,
+                            "by_reference": false
+                        },
+                        {
+                            "name": "fieldHandle",
+                            "type": "string",
+                            "optional": false,
+                            "variadic": false,
+                            "by_reference": false
+                        },
+                        {
+                            "name": "scopeKey",
+                            "type": "string",
+                            "optional": false,
+                            "variadic": false,
+                            "by_reference": false
+                        },
+                        {
+                            "name": "periodKey",
+                            "type": "string",
+                            "optional": false,
+                            "variadic": false,
+                            "by_reference": false
+                        },
+                        {
+                            "name": "now",
+                            "type": "DateTimeImmutable",
+                            "optional": false,
+                            "variadic": false,
+                            "by_reference": false
+                        }
+                    ],
+                    "return": "int"
+                }
+            },
+            "deprecated": null
+        },
+        "Kumwe\\Sequence\\Exception\\NumberSequenceUnavailable": {
+            "kind": "class",
+            "stability": "stable",
+            "file": "src/Exception/NumberSequenceUnavailable.php",
+            "abstract": false,
+            "final": true,
+            "readonly": false,
+            "parent": "RuntimeException",
+            "interfaces": [
+                "Stringable",
+                "Throwable"
+            ],
+            "constants": {},
+            "properties": {},
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "previous",
+                            "type": "?Throwable",
+                            "optional": true,
+                            "variadic": false,
+                            "by_reference": false
+                        }
+                    ],
+                    "return": null
+                }
+            },
+            "deprecated": null
+        },
+        "Kumwe\\Sequence\\Value\\NumberSequenceFormat": {
+            "kind": "class",
+            "stability": "stable",
+            "file": "src/Value/NumberSequenceFormat.php",
+            "abstract": false,
+            "final": true,
+            "readonly": true,
+            "parent": null,
+            "interfaces": [],
+            "constants": {
+                "MAXIMUM_LENGTH": {
+                    "type": "int"
+                },
+                "MAXIMUM_PADDING": {
+                    "type": "int"
+                },
+                "MAXIMUM_PREFIX": {
+                    "type": "int"
+                }
+            },
+            "properties": {
+                "padding": {
+                    "type": "int",
+                    "static": false,
+                    "readonly": true
+                },
+                "prefix": {
+                    "type": "string",
+                    "static": false,
+                    "readonly": true
+                },
+                "reset": {
+                    "type": "Kumwe\\Sequence\\Value\\NumberSequenceReset",
+                    "static": false,
+                    "readonly": true
+                },
+                "scope": {
+                    "type": "Kumwe\\Sequence\\Value\\NumberSequenceScope",
+                    "static": false,
+                    "readonly": true
+                },
+                "timezone": {
+                    "type": "DateTimeZone",
+                    "static": false,
+                    "readonly": true
+                }
+            },
+            "methods": {
+                "counter": {
+                    "visibility": "public",
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "organizationIdentifier",
+                            "type": "?string",
+                            "optional": false,
+                            "variadic": false,
+                            "by_reference": false
+                        },
+                        {
+                            "name": "at",
+                            "type": "DateTimeImmutable",
+                            "optional": false,
+                            "variadic": false,
+                            "by_reference": false
+                        }
+                    ],
+                    "return": "array"
+                },
+                "fromConfiguration": {
+                    "visibility": "public",
+                    "static": true,
+                    "parameters": [
+                        {
+                            "name": "configuration",
+                            "type": "array",
+                            "optional": false,
+                            "variadic": false,
+                            "by_reference": false
+                        }
+                    ],
+                    "return": "Kumwe\\Sequence\\Value\\NumberSequenceFormat"
+                },
+                "render": {
+                    "visibility": "public",
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "value",
+                            "type": "int",
+                            "optional": false,
+                            "variadic": false,
+                            "by_reference": false
+                        },
+                        {
+                            "name": "periodKey",
+                            "type": "string",
+                            "optional": false,
+                            "variadic": false,
+                            "by_reference": false
+                        }
+                    ],
+                    "return": "string"
+                }
+            },
+            "deprecated": null
+        },
+        "Kumwe\\Sequence\\Value\\NumberSequenceReset": {
+            "kind": "enum",
+            "stability": "stable",
+            "file": "src/Value/NumberSequenceReset.php",
+            "abstract": false,
+            "final": true,
+            "readonly": false,
+            "parent": null,
+            "interfaces": [
+                "BackedEnum",
+                "UnitEnum"
+            ],
+            "constants": {
+                "FiscalPeriod": {
+                    "type": "Kumwe\\Sequence\\Value\\NumberSequenceReset"
+                },
+                "Monthly": {
+                    "type": "Kumwe\\Sequence\\Value\\NumberSequenceReset"
+                },
+                "Never": {
+                    "type": "Kumwe\\Sequence\\Value\\NumberSequenceReset"
+                },
+                "Yearly": {
+                    "type": "Kumwe\\Sequence\\Value\\NumberSequenceReset"
+                }
+            },
+            "properties": {},
+            "methods": {
+                "key": {
+                    "visibility": "public",
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "at",
+                            "type": "DateTimeImmutable",
+                            "optional": false,
+                            "variadic": false,
+                            "by_reference": false
+                        },
+                        {
+                            "name": "timezone",
+                            "type": "DateTimeZone",
+                            "optional": false,
+                            "variadic": false,
+                            "by_reference": false
+                        }
+                    ],
+                    "return": "string"
+                }
+            },
+            "deprecated": null
+        },
+        "Kumwe\\Sequence\\Value\\NumberSequenceScope": {
+            "kind": "enum",
+            "stability": "stable",
+            "file": "src/Value/NumberSequenceScope.php",
+            "abstract": false,
+            "final": true,
+            "readonly": false,
+            "parent": null,
+            "interfaces": [
+                "BackedEnum",
+                "UnitEnum"
+            ],
+            "constants": {
+                "Organization": {
+                    "type": "Kumwe\\Sequence\\Value\\NumberSequenceScope"
+                },
+                "Site": {
+                    "type": "Kumwe\\Sequence\\Value\\NumberSequenceScope"
+                }
+            },
+            "properties": {},
+            "methods": {
+                "key": {
+                    "visibility": "public",
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "organizationIdentifier",
+                            "type": "?string",
+                            "optional": false,
+                            "variadic": false,
+                            "by_reference": false
+                        }
+                    ],
+                    "return": "string"
+                }
+            },
+            "deprecated": null
+        }
+    },
+    "extension_points": [
+        "Kumwe\\Sequence\\Contract\\NumberSequenceAllocator"
+    ],
+    "digest_of": "src"
+}

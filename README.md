@@ -122,7 +122,7 @@ reason; [`docs/integration.md`](docs/integration.md) walks through the binding a
 
 | Symbol | Kind | Capability | Lifetime |
 | --- | --- | --- | --- |
-| `Kumwe\Sequence\Value\NumberSequenceFormat` | final readonly class | `sequence.format` | value, built per declaration |
+| `Kumwe\Sequence\Value\NumberSequenceFormat` | final readonly class | `sequence.format` | value, per declaration |
 | `Kumwe\Sequence\Value\NumberSequenceReset` | string-backed enum | `sequence.reset` | case |
 | `Kumwe\Sequence\Value\NumberSequenceScope` | string-backed enum | `sequence.scope` | case |
 | `Kumwe\Sequence\Contract\NumberSequenceAllocator` | interface | `sequence.allocation` | host-supplied per connection |

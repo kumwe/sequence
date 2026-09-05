@@ -93,7 +93,11 @@ final class NumberSequenceScopeTest extends TestCase
     public function testCasesCompareByIdentityAndRoundTripThroughTheirValue(): void
     {
         $this->assertTrue(NumberSequenceScope::from('site') === NumberSequenceScope::Site, 'Identity.');
-        $this->assertTrue(NumberSequenceScope::Site !== NumberSequenceScope::Organization, 'Distinct cases differ.');
+        foreach (NumberSequenceScope::cases() as $left) {
+            foreach (NumberSequenceScope::cases() as $right) {
+                $this->assertSame($left->value === $right->value, $left === $right, 'Identity follows the value.');
+            }
+        }
         $this->assertSame('organization', NumberSequenceScope::Organization->value, 'The backing value.');
         $this->assertSame('"site"', json_encode(NumberSequenceScope::Site), 'A case serializes as its value.');
         $this->assertSame(
