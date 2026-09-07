@@ -68,8 +68,8 @@ target:
   repository: https://github.com/kumwe/sequence
   artifact_identity: "kumwe/sequence (Composer library)"
   canonical_namespace_or_abi: Kumwe\Sequence
-  branch: phase-1/extract-sequence
-  pull_request: "https://github.com/kumwe/sequence/pull/1"
+  branch: fix/extraction-audit-20260907
+  pull_request: "https://github.com/kumwe/sequence/pull/2"
 ownership:
   responsibility: "Portable document numbering: format, reset and scope values, allocator port and one refusal."
   non_responsibilities:
@@ -84,11 +84,11 @@ ownership:
   next_consumer: kumwe/app
   public_manifests:
     - path: resources/public-api/v1.json
-      sha256: "1da60cc7c0af8bc9f355b20a42c5dd311baa1376965d19e60f4a6de241b0c605"
+      sha256: "6adb438b07209efb6b6c1222e578008dd18b9795e4c4ddfbdff46ff3dcfec28b"
     - path: resources/capabilities/v1.json
-      sha256: "8ac4c0b3f99268479290a0c16041b1fe1c74f53045b5c39733583e585b665a2b"
+      sha256: "c9ab1bab2590e5e5ec4721e4262406571b98f43dfa1f17c72b61904dc48f0425"
     - path: resources/service-map/v1.json
-      sha256: "527c48aab4cc042a84c6ddf13a321ced7bee140e36a5d340591bceb0e81ce3e8"
+      sha256: "0dad400b91586b0b419e959118173040d23bf676967f3ea5a7c97cd40984e3d4"
   intentionally_excluded:
     - "DoctrineBusinessNumberSequenceAllocator stays in App; it owns the counter row, its lock and compare-and-set"
     - "BusinessRecordTemporarilyUnavailable stays in App; it is the App's retryable record exception, not the port's"
@@ -126,7 +126,7 @@ framework_php:
       exceptions:
         - InvalidArgumentException
       serialization_contract: null
-      compatibility: preserved
+      compatibility: "0.2.0 correction (D13): counter() propagates the reserved organization marker refusal"
     - old_fqcn: Kumwe\App\BusinessDefinition\Domain\NumberSequenceReset
       new_fqcn: Kumwe\Sequence\Value\NumberSequenceReset
       source_path: src/BusinessDefinition/Domain/NumberSequenceReset.php
@@ -158,7 +158,7 @@ framework_php:
       exceptions:
         - InvalidArgumentException
       serialization_contract: "string-backed enum; serializes as its backing value (site, organization)"
-      compatibility: preserved
+      compatibility: "0.2.0 correction (D13): organization identifier '-' is refused; other keys are unchanged"
     - old_fqcn: Kumwe\App\BusinessRecord\Application\BusinessNumberSequenceAllocator
       new_fqcn: Kumwe\Sequence\Contract\NumberSequenceAllocator
       source_path: src/BusinessRecord/Application/BusinessNumberSequenceAllocator.php
@@ -251,9 +251,9 @@ documentation:
   examples:
     - examples/allocate-and-render.php
     - examples/README.md
-  changelog_record: "CHANGELOG.md ## 0.1.0"
+  changelog_record: "CHANGELOG.md ## 0.2.0"
 release_expectations:
-  version_policy: "SemVer, exact pins while pre-1.0; the newest CHANGELOG.md heading (## 0.1.0) is the release record"
+  version_policy: "SemVer, exact pins while pre-1.0; the newest CHANGELOG.md heading (## 0.2.0) is the release record"
   expected_artifact_types:
     - "Composer dist archive of the tag release-on-record creates from the changelog heading, then Packagist"
   required_checks:
@@ -391,6 +391,7 @@ decisions:
   - "D10: no allocator ships in src/, not even a test double; the in-memory reference lives under tests/ and examples/"
   - "D11: the App's unit corpus for the three values is replayed here case by case and extended (section 5)"
   - "D12: the refusal's message, code 0 and chained previous are the fixed identity a retry policy and a log see"
+  - "D13: 0.2.0 rejects reserved organization key '-' to enforce disjoint scopes; supersedes D3 only for that input"
 blockers: []
 ---
 
@@ -646,3 +647,37 @@ except the clean-consumer gate, which refused the archive for the missing `MIGRA
 App's `PackageManifests` reader accepts the package as `v2-manifested` with the handoff in state
 `draft_pr_open`. A gitleaks history scan could not run locally (no Docker); the tree carries no
 configuration or credential material, and `composer audit --abandoned=fail` runs in CI.
+
+## September 2026 extraction audit follow-up
+
+This follow-up is prepared in [PR #2](https://github.com/kumwe/sequence/pull/2), with the release record
+`CHANGELOG.md ## 0.2.0`. The source baseline, original extraction inventory and historical evidence
+above remain provenance for the original work; this section records the successor's reviewed changes.
+The front-matter target and public-manifest digests describe this successor, not the original PR.
+
+The only production delta is `NumberSequenceScope::Organization->key('-')`: it now raises
+`InvalidArgumentException` because `-` is already the site-wide counter marker. This closes the
+documented collision-free scope-key guarantee. Its propagation through `NumberSequenceFormat::counter()`
+is documented. This intentional refusal change uses 0.2.0 under the package's pre-1.0 compatibility policy.
+Before adoption, inspect host organization identifiers and reject or migrate the reserved marker through
+the host's authority and data-migration process; never silently merge or rename counters. All other
+formatting, reset, allocation and refusal behavior remains the original extraction's behavior.
+
+The package still has no runtime Composer dependency beyond PHP, no provider and no host implementation.
+The improved consumer gate installs the exact built ZIP as a dependency of an otherwise empty Composer
+project, verifies its installed archive, and exercises its shipped smoke and example exclusively through
+the consumer's authoritative autoloader. Packagist is disabled for that dependency-free consumer.
+The release workflow now uses one tested parser for pushed and tagged changelogs, including Unreleased.
+Malformed headings fail closed; the complete check command also includes security audit.
+
+App adoption remains a separate task after a human merge, automated publication and independent external
+release attestation for this successor. The existing file-specific consumer, removal and retained-test
+instructions above remain in force. No release identity, archive digest, database result or completed
+roadmap objective is claimed by this embedded record.
+
+Follow-up verification used PHP 8.5.10 with Composer 2.10.3 and no platform bypass: strict coding standards,
+PHPStan level max with strict/deprecation rules, package tests and the real ZIP dependency consumer passed.
+Observed results: 56 tests and 362 assertions; a 22-file installed archive with 5 public symbols.
+The release parser passed twelve cases. Local security audit could not reach the advisory endpoint on one
+attempt; GitHub Actions ran the audit successfully on the initial draft, and the final PR workflow reruns
+the full gate. Its check result is external to this embedded handoff and must be green before review-ready.
