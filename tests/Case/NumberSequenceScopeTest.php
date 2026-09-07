@@ -84,6 +84,25 @@ final class NumberSequenceScopeTest extends TestCase
     }
 
     /**
+     * An organization cannot reuse the site marker and merge two different scope identities.
+     *
+     * @return  void
+     *
+     * @since   0.2.0
+     */
+    public function testAnOrganizationCannotUseTheReservedSiteCounterKey(): void
+    {
+        $refusal = $this->assertThrows(
+            static fn (): string => NumberSequenceScope::Organization->key('-'),
+            InvalidArgumentException::class,
+            'The site-wide marker is reserved even when a host otherwise permits it as an identifier.',
+        );
+
+        $this->assertStringContains('reserved site-wide counter key', $refusal->getMessage(), 'Reserved marker.');
+        $this->assertSame('-', NumberSequenceScope::Site->key('-'), 'The site scope retains its existing marker.');
+    }
+
+    /**
      * Cases are singletons: equality is identity, and a case round-trips through its backing value.
      *
      * @return  void

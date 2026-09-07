@@ -4,6 +4,22 @@ Delivered package changes, newest first. A change is recorded here only after it
 clean clone. The newest `## X.Y.Z` heading is the release record: a merge to `main` that carries it is the
 release, published by the `Release on record` workflow ([`docs/releasing.md`](docs/releasing.md)).
 
+## 0.2.0
+
+- **Disjoint sequence scope keys.** Reject the reserved site marker `-` as an organization identifier.
+  Previously it could produce the same counter key as a site-wide sequence, contrary to the published
+  collision-free grammar. Other identifiers remain verbatim. This is an intentional refusal change and
+  uses a pre-1.0 minor release; hosts must reject or migrate that reserved identifier before adoption.
+- **Prove the archive as a dependency.** Install the actual built ZIP into a new no-dev Composer consumer,
+  verify its installed files and authoritative classmap, and run the shipped example and smoke through
+  the consumer autoloader. No path repository, source fallback or development toolchain participates.
+- **Consistent release verification.** Use one tested parser for pushed and tagged changelogs, including
+  Unreleased sections. Reject malformed brackets and leading-zero versions. Include security audit and
+  twelve parser regressions in the single `composer check` entry point.
+- **Extraction audit.** Reconciled the five extracted types with App baseline
+  `960ce8ec00cf724a7cae03e5ba09c4852c9ab54e`; the reserved-marker refusal is the only production change.
+  Database allocation, concurrency, authority and recovery remain App responsibilities.
+
 ## 0.1.0
 
 - **The number format, reset and scope values.** Extracted from Kumwe App as a drop-in replacement:

@@ -128,7 +128,8 @@ final readonly class NumberSequenceFormat
      * @return  array{scope: string, period: string}  The two coordinates that, with the site, definition
      *          and field handle, identify exactly one counter.
      *
-     * @throws  InvalidArgumentException  When a per-organization sequence has no organization to key on, or
+     * @throws  InvalidArgumentException  When a per-organization sequence has no organization or uses the
+     *          reserved site marker, or
      *          the reset is `FiscalPeriod`, whose period key the host resolves from the posting date instead.
      *
      * @since   0.1.0

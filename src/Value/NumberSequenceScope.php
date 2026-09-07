@@ -47,7 +47,7 @@ enum NumberSequenceScope: string
      * The key grammar is fixed and closed: `-` names the site-wide counter, so an organization identifier
      * can never collide with it, and a per-branch counter is keyed by the organization identifier exactly
      * as the host resolved it. The identifier's own grammar is the host's; this package only refuses an
-     * absent or empty one, because an empty key would merge every branch into one run.
+     * absent or empty one and the reserved site marker, because those cannot identify a separate branch run.
      *
      * @param   ?string  $organizationIdentifier  Organization the record belongs to, or null when its
      *          definition's scope mode carries no organization dimension.
@@ -55,7 +55,7 @@ enum NumberSequenceScope: string
      * @return  string  `-` for a site-wide counter, and the organization identifier for a per-branch one.
      *
      * @throws  InvalidArgumentException  When a per-organization sequence is declared on a definition whose
-     *          scope mode carries no organization dimension.
+     *          scope mode carries no organization dimension, or whose organization uses the reserved site marker.
      *
      * @since   0.1.0
      */
@@ -67,6 +67,11 @@ enum NumberSequenceScope: string
         if ($organizationIdentifier === null || $organizationIdentifier === '') {
             throw new InvalidArgumentException(
                 'A per-organization number sequence requires a record scope carrying an organization.',
+            );
+        }
+        if ($organizationIdentifier === '-') {
+            throw new InvalidArgumentException(
+                'A per-organization number sequence cannot use the reserved site-wide counter key.',
             );
         }
 
