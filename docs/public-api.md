@@ -29,7 +29,7 @@ Vocabulary used below:
 
 | Key or value | Grammar |
 | --- | --- |
-| scope key | `-` for `site`; the organization identifier, verbatim and non-empty, for `organization` |
+| scope key | `-` for `site`; the non-empty organization identifier verbatim, except reserved `-` |
 | period key | `` for `never`; `YYYY` for `yearly`; `YYYY-MM` for `monthly`; a declared period key (`fiscal-period`) |
 | reserved value | an integer of one or more; one that pads past `MAXIMUM_PADDING` digits is refused at rendering |
 | rendered number | `prefix` `period` `-` `digits` (hyphen only with a period segment); at most `MAXIMUM_LENGTH` (36) |
@@ -128,7 +128,7 @@ the period key from `NumberSequenceReset::key()`, in that key order. With the si
 handle they identify exactly one counter.
 
 **Exceptions.** `InvalidArgumentException` when the scope is `organization` and the identifier is `null`
-or empty, or when the reset is `fiscal-period` — its period key is a posting period the host declared, so
+or empty or the reserved `-`, or when the reset is `fiscal-period` — its period key is host-declared, so
 the host composes the scope key through `NumberSequenceScope::key()` and supplies the period key itself.
 
 **Side effects and state mutation.** None.
@@ -270,9 +270,9 @@ is composed from the record's own resolved scope, never from caller input.
 **Returns.** `string` — `-` for `Site`, whatever the identifier; the identifier verbatim for
 `Organization`. The site marker is fixed, so no organization identifier can be mistaken for it.
 
-**Exceptions.** `InvalidArgumentException` for `Organization` with a `null` or empty identifier: an empty
-key would merge every branch into one run. The identifier's own grammar is the host's; this package does not
-constrain it beyond non-emptiness.
+**Exceptions.** `InvalidArgumentException` for `Organization` with a `null`, empty or reserved `-` identifier.
+An empty key cannot identify a branch; the reserved marker would collide with the site-wide counter.
+The reserved-marker refusal was added in 0.2.0. All other identifier grammar remains the host's.
 
 **Side effects, nullability, precision, transaction, concurrency.** None; the argument may be `null`; the
 identifier is not normalized; pure.

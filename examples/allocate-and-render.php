@@ -21,8 +21,15 @@ use Kumwe\Sequence\Exception\NumberSequenceUnavailable;
 use Kumwe\Sequence\Value\NumberSequenceFormat;
 
 $root = dirname(__DIR__);
-if (is_file($root . '/vendor/autoload.php')) {
-    require $root . '/vendor/autoload.php';
+/** @var list<string> $arguments */
+$arguments = $_SERVER['argv'] ?? [];
+$autoload = $arguments[1] ?? $root . '/vendor/autoload.php';
+if (isset($arguments[1]) && !is_file($autoload)) {
+    fwrite(STDERR, "The specified consumer autoloader is missing.\n");
+    exit(1);
+}
+if (is_file($autoload)) {
+    require $autoload;
 } else {
     spl_autoload_register(static function (string $class) use ($root): void {
         $prefix = 'Kumwe\\Sequence\\';
