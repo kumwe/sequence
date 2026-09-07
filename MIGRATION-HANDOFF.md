@@ -68,7 +68,7 @@ target:
   repository: https://github.com/kumwe/sequence
   artifact_identity: "kumwe/sequence (Composer library)"
   canonical_namespace_or_abi: Kumwe\Sequence
-  branch: fix/extraction-audit-20260907
+  branch: fix/unified-package-release
   pull_request: "https://github.com/kumwe/sequence/pull/2"
 ownership:
   responsibility: "Portable document numbering: format, reset and scope values, allocator port and one refusal."
@@ -84,11 +84,11 @@ ownership:
   next_consumer: kumwe/app
   public_manifests:
     - path: resources/public-api/v1.json
-      sha256: "6adb438b07209efb6b6c1222e578008dd18b9795e4c4ddfbdff46ff3dcfec28b"
+      sha256: "01f26a717405438d10bd76e33dda4edaae16fa03f3976dc26d8ccde2a30c1964"
     - path: resources/capabilities/v1.json
-      sha256: "c9ab1bab2590e5e5ec4721e4262406571b98f43dfa1f17c72b61904dc48f0425"
+      sha256: "13c07a238124b08486f53e3d4c7dccd7a0990d95b40ec017c302acc2357c9ea7"
     - path: resources/service-map/v1.json
-      sha256: "0dad400b91586b0b419e959118173040d23bf676967f3ea5a7c97cd40984e3d4"
+      sha256: "34ee30e7c49f707bafaa0a7e5d6d1964f32af98124a396424ecc678aae266ed0"
   intentionally_excluded:
     - "DoctrineBusinessNumberSequenceAllocator stays in App; it owns the counter row, its lock and compare-and-set"
     - "BusinessRecordTemporarilyUnavailable stays in App; it is the App's retryable record exception, not the port's"
@@ -251,9 +251,9 @@ documentation:
   examples:
     - examples/allocate-and-render.php
     - examples/README.md
-  changelog_record: "CHANGELOG.md ## 0.2.0"
+  changelog_record: "CHANGELOG.md ## 0.2.1"
 release_expectations:
-  version_policy: "SemVer, exact pins while pre-1.0; the newest CHANGELOG.md heading (## 0.2.0) is the release record"
+  version_policy: "SemVer, exact pins while pre-1.0; the newest CHANGELOG.md heading (## 0.2.1) is the release record"
   expected_artifact_types:
     - "Composer dist archive of the tag release-on-record creates from the changelog heading, then Packagist"
   required_checks:
@@ -688,3 +688,17 @@ Portable behavior, boundary and conformance evidence is maintained in `tests/own
 validated against the public API and actual test-runner discovery by `composer test:ownership`.
 See `docs/test-ownership.md` for the future-change rule and the precise host boundary.
 This follow-up changes package tests/tooling only; it does not authorize early App test deletion.
+
+## Release automation successor candidate: 0.2.1
+
+`CHANGELOG.md ## 0.2.1` records the candidate prepared by this change. It is not a published release or a
+release attestation. The three public manifests and their front-matter digests describe this candidate;
+the extraction inventory, App baseline and earlier follow-up evidence remain historical provenance.
+
+Release verification uses the commit supplied by the push event after rebasing onto the default branch.
+The release candidate does not embed a pull-request head identity as a test prerequisite. Publication
+prerequisites are checked before changes to tags or releases; previously published versions are preserved.
+The runtime source, public symbols, host responsibilities and package test ownership are unchanged.
+
+App adoption still requires successful publication and independent external attestation of this successor.
+No archive digest, published tag identity or successful hosted workflow result is asserted by this record.
