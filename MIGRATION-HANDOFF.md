@@ -69,7 +69,7 @@ target:
   artifact_identity: "kumwe/sequence (Composer library)"
   canonical_namespace_or_abi: Kumwe\Sequence
   branch: fix/unified-package-release
-  pull_request: "https://github.com/kumwe/sequence/pull/2"
+  pull_request: "https://github.com/kumwe/sequence/pull/4"
 ownership:
   responsibility: "Portable document numbering: format, reset and scope values, allocator port and one refusal."
   non_responsibilities:
