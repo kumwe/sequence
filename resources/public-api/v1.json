@@ -1,7 +1,7 @@
 {
     "schema": "kumwe-package-public-api/v1",
     "package": "kumwe/sequence",
-    "release": "0.2.0",
+    "release": "0.2.1",
     "namespace": "Kumwe\\Sequence\\",
     "symbols": {
         "Kumwe\\Sequence\\Contract\\NumberSequenceAllocator": {

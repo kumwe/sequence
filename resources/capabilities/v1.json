@@ -1,7 +1,7 @@
 {
   "schema": "kumwe-package-capabilities/v1",
   "package": "kumwe/sequence",
-  "release": "0.2.0",
+  "release": "0.2.1",
   "namespace": "Kumwe\\Sequence\\",
   "responsibility": "Portable document numbering: format, reset and scope values, allocator port and one refusal.",
   "non_responsibilities": [
