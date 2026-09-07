@@ -7,76 +7,78 @@
       "php",
       "tests/run.php",
       "--list-json"
-    ]
+    ],
+    "namespace_prefix": "Kumwe\\Sequence\\Tests\\"
   },
   "exports": {
     "Kumwe\\Sequence\\Contract\\NumberSequenceAllocator": {
       "behavior": [
-        "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceAllocatorContractTest::testThePortIsAnInterfaceWithOneAllocationMethod",
-        "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceAllocatorContractTest::testAnInMemoryReferenceKeepsTheDocumentedPromises"
+        "Case\\NumberSequenceAllocatorContractTest::testThePortIsAnInterfaceWithOneAllocationMethod",
+        "Case\\NumberSequenceAllocatorContractTest::testAnInMemoryReferenceKeepsTheDocumentedPromises"
       ],
       "boundary": [
-        "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceAllocatorContractTest::testThePortDeclaresThePackageRefusalAndTheGaplessPromise",
-        "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceAllocatorContractTest::testARefusalReservesNothing"
+        "Case\\NumberSequenceAllocatorContractTest::testThePortDeclaresThePackageRefusalAndTheGaplessPromise",
+        "Case\\NumberSequenceAllocatorContractTest::testARefusalReservesNothing"
       ],
-      "note": "The package owns the port contract; listed cases exercise its signature or consumer path. Concrete host adapter behavior remains with its implementing repository."
+      "note": "Owns port signature/consumer contract; concrete adapters own their implementation behavior."
     },
     "Kumwe\\Sequence\\Exception\\NumberSequenceUnavailable": {
       "behavior": [
-        "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceUnavailableTest::testTheRefusalIsAFinalRuntimeExceptionWithAFixedMessage"
+        "Case\\NumberSequenceUnavailableTest::testTheRefusalIsAFinalRuntimeExceptionWithAFixedMessage"
       ],
       "boundary": [
-        "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceUnavailableTest::testTheRefusalIsAFinalRuntimeExceptionWithAFixedMessage",
-        "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceUnavailableTest::testTheTranslatedFailureStaysReachableAsThePrevious"
+        "Case\\NumberSequenceUnavailableTest::testTheRefusalIsAFinalRuntimeExceptionWithAFixedMessage",
+        "Case\\NumberSequenceUnavailableTest::testTheTranslatedFailureStaysReachableAsThePrevious"
       ]
     },
     "Kumwe\\Sequence\\Value\\NumberSequenceFormat": {
       "behavior": [
-        "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testAnEmptyDeclarationIsASiteWideLifetimeCounterInUtc",
-        "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testNullConfigurationValuesFallBackToTheDefaults"
+        "Case\\NumberSequenceFormatTest::testAnEmptyDeclarationIsASiteWideLifetimeCounterInUtc",
+        "Case\\NumberSequenceFormatTest::testNullConfigurationValuesFallBackToTheDefaults"
       ],
       "boundary": [
-        "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testTheBoundsAreTheDocumentedOnes",
-        "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testANumberThatOutgrewItsPaddingIsRefusedRatherThanTruncated"
+        "Case\\NumberSequenceFormatTest::testTheBoundsAreTheDocumentedOnes",
+        "Case\\NumberSequenceFormatTest::testANumberThatOutgrewItsPaddingIsRefusedRatherThanTruncated"
       ]
     },
     "Kumwe\\Sequence\\Value\\NumberSequenceReset": {
       "behavior": [
-        "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceResetTest::testTheDeclaredVocabularyIsExactlyThePublishedCaseSet",
-        "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceResetTest::testALifetimeRunHasAnEmptyKeyEverywhere"
+        "Case\\NumberSequenceResetTest::testTheDeclaredVocabularyIsExactlyThePublishedCaseSet",
+        "Case\\NumberSequenceResetTest::testALifetimeRunHasAnEmptyKeyEverywhere"
       ],
       "boundary": [
-        "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceResetTest::testTheFiscalPeriodKeyIsNeverDerivedFromAnInstantAndTimezone"
+        "Case\\NumberSequenceResetTest::testTheFiscalPeriodKeyIsNeverDerivedFromAnInstantAndTimezone"
       ]
     },
     "Kumwe\\Sequence\\Value\\NumberSequenceScope": {
       "behavior": [
-        "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceScopeTest::testTheDeclaredVocabularyIsExactlyThePublishedCaseSet",
-        "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceScopeTest::testASiteWideCounterIsKeyedByTheFixedMarker"
+        "Case\\NumberSequenceScopeTest::testTheDeclaredVocabularyIsExactlyThePublishedCaseSet",
+        "Case\\NumberSequenceScopeTest::testASiteWideCounterIsKeyedByTheFixedMarker"
       ],
       "boundary": [
-        "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceScopeTest::testAPerOrganizationCounterRefusesAnAbsentOrEmptyOrganization",
-        "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceScopeTest::testAnOrganizationCannotUseTheReservedSiteCounterKey"
+        "Case\\NumberSequenceScopeTest::testAPerOrganizationCounterRefusesAnAbsentOrEmptyOrganization",
+        "Case\\NumberSequenceScopeTest::testAnOrganizationCannotUseTheReservedSiteCounterKey"
       ]
     }
   },
   "conformance": {
     "status": "owned",
-    "rationale": "Number formatting, reset and scope conformance vectors are embedded in the package case methods; database allocation policy is host-owned.",
+    "rationale": "Embedded format, reset and scope vectors; allocation persistence stays host-owned.",
     "tests": [
-      "Kumwe\\Sequence\\Tests\\Case\\DocumentationTest::testThePublicApiDocumentStatesTheGrammarAndBounds",
-      "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testThePrefixGrammarAdmitsExactlyUpperCaseDigitsHyphenAndSlash",
-      "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceResetTest::testTheDeclaredVocabularyIsExactlyThePublishedCaseSet",
-      "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceResetTest::testALifetimeRunHasAnEmptyKeyEverywhere",
-      "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceResetTest::testAYearlyRunRollsOverAtLocalNewYear",
-      "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceResetTest::testAMonthlyRunRollsOverAtLocalMonthStart",
-      "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceResetTest::testTheKeyIgnoresTheInstantsOffsetAndTheProcessDefaultZone",
-      "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceResetTest::testTheFiscalPeriodKeyIsNeverDerivedFromAnInstantAndTimezone"
+      "Case\\DocumentationTest::testThePublicApiDocumentStatesTheGrammarAndBounds",
+      "Case\\NumberSequenceFormatTest::testThePrefixGrammarAdmitsExactlyUpperCaseDigitsHyphenAndSlash",
+      "Case\\NumberSequenceResetTest::testTheDeclaredVocabularyIsExactlyThePublishedCaseSet",
+      "Case\\NumberSequenceResetTest::testALifetimeRunHasAnEmptyKeyEverywhere",
+      "Case\\NumberSequenceResetTest::testAYearlyRunRollsOverAtLocalNewYear",
+      "Case\\NumberSequenceResetTest::testAMonthlyRunRollsOverAtLocalMonthStart",
+      "Case\\NumberSequenceResetTest::testTheKeyIgnoresTheInstantsOffsetAndTheProcessDefaultZone",
+      "Case\\NumberSequenceResetTest::testTheFiscalPeriodKeyIsNeverDerivedFromAnInstantAndTimezone"
     ],
     "corpora": []
   },
   "architecture": [
-    "tools/verify-architecture.php"
+    "tools/verify-architecture.php",
+    "tools/verify-boundary-tokens.php"
   ],
   "host": {
     "repository": "kumwe/app",
@@ -86,24 +88,24 @@
         "source_test": "tests/Unit/BusinessDefinition/Domain/NumberSequenceFormatTest.php",
         "action": "remove-on-adoption",
         "package_tests": [
-          "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testAnEmptyDeclarationIsASiteWideLifetimeCounterInUtc",
-          "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testNullConfigurationValuesFallBackToTheDefaults",
-          "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testTheResetPeriodIsJudgedInTheDeclaredZoneRatherThanUtc",
-          "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testAMonthlyRunKeysAndRendersItsCalendarMonth",
-          "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testAPerOrganizationRunKeysOnTheRecordsOwnOrganization",
-          "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testTheWidestFormatStillFitsTheColumnTheFormatDeclares",
-          "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testTheBoundsAreTheDocumentedOnes",
-          "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testANumberThatOutgrewItsPaddingIsRefusedRatherThanTruncated",
-          "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testAValueWiderThanItsPaddingIsRenderedInFullWhileTheColumnHoldsIt",
-          "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testAnUnusableDeclarationIsRefusedRatherThanDefaultedOver",
-          "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testThePrefixGrammarAdmitsExactlyUpperCaseDigitsHyphenAndSlash",
-          "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testAZeroOrNegativeCounterValueIsNeverRendered",
-          "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testTheKeyOfALifetimeRunIsEmptyWhateverTheZone",
-          "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testAFiscalPeriodDeclarationParsesAndRendersTheDeclaredKey",
-          "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testAFiscalFormatRefusesToComposeACounterFromTheAllocationInstant",
-          "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testADeclaredFiscalKeyCountsTowardTheMaximumLength",
-          "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testRenderingIsDeterministic",
-          "Kumwe\\Sequence\\Tests\\Case\\NumberSequenceFormatTest::testTheDeclarationIsAFinalReadOnlyValue"
+          "Case\\NumberSequenceFormatTest::testAnEmptyDeclarationIsASiteWideLifetimeCounterInUtc",
+          "Case\\NumberSequenceFormatTest::testNullConfigurationValuesFallBackToTheDefaults",
+          "Case\\NumberSequenceFormatTest::testTheResetPeriodIsJudgedInTheDeclaredZoneRatherThanUtc",
+          "Case\\NumberSequenceFormatTest::testAMonthlyRunKeysAndRendersItsCalendarMonth",
+          "Case\\NumberSequenceFormatTest::testAPerOrganizationRunKeysOnTheRecordsOwnOrganization",
+          "Case\\NumberSequenceFormatTest::testTheWidestFormatStillFitsTheColumnTheFormatDeclares",
+          "Case\\NumberSequenceFormatTest::testTheBoundsAreTheDocumentedOnes",
+          "Case\\NumberSequenceFormatTest::testANumberThatOutgrewItsPaddingIsRefusedRatherThanTruncated",
+          "Case\\NumberSequenceFormatTest::testAValueWiderThanItsPaddingIsRenderedInFullWhileTheColumnHoldsIt",
+          "Case\\NumberSequenceFormatTest::testAnUnusableDeclarationIsRefusedRatherThanDefaultedOver",
+          "Case\\NumberSequenceFormatTest::testThePrefixGrammarAdmitsExactlyUpperCaseDigitsHyphenAndSlash",
+          "Case\\NumberSequenceFormatTest::testAZeroOrNegativeCounterValueIsNeverRendered",
+          "Case\\NumberSequenceFormatTest::testTheKeyOfALifetimeRunIsEmptyWhateverTheZone",
+          "Case\\NumberSequenceFormatTest::testAFiscalPeriodDeclarationParsesAndRendersTheDeclaredKey",
+          "Case\\NumberSequenceFormatTest::testAFiscalFormatRefusesToComposeACounterFromTheAllocationInstant",
+          "Case\\NumberSequenceFormatTest::testADeclaredFiscalKeyCountsTowardTheMaximumLength",
+          "Case\\NumberSequenceFormatTest::testRenderingIsDeterministic",
+          "Case\\NumberSequenceFormatTest::testTheDeclarationIsAFinalReadOnlyValue"
         ],
         "retained": "Keep allocator contention, fiscal calendar and persistence integration."
       }
