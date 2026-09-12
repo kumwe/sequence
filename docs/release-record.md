@@ -380,7 +380,9 @@ consumer_contract:
   - grep -rn 'BusinessNumberSequenceAllocator\|Domain.NumberSequence' src tests config bootstrap docs
 ---
 
-# Package contract
+# Release contract
+
+## Package contract
 
 This record preserves exact source provenance, manifest identities and consumer qualification requirements.
 Migration/change-set IDs are stable evidence references. The [Core contract](integration.md) defines the current
