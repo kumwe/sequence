@@ -83,7 +83,7 @@ final class ManifestsTest extends TestCase
     }
 
     /**
-     * The three manifests agree with each other and with the newest changelog heading on the release.
+     * The three manifests agree with each other and with the newest released changelog heading on the release.
      *
      * @return  void
      *
@@ -92,8 +92,13 @@ final class ManifestsTest extends TestCase
     public function testTheManifestsAgreeWithTheChangelogOnTheRelease(): void
     {
         $heading = null;
+        $unreleased = false;
         foreach (explode("\n", $this->read('CHANGELOG.md')) as $line) {
             if (str_starts_with($line, '## ')) {
+                if (!$unreleased && in_array($line, ['## Unreleased', '## [Unreleased]'], true)) {
+                    $unreleased = true;
+                    continue;
+                }
                 $heading = $line;
                 break;
             }
@@ -101,7 +106,7 @@ final class ManifestsTest extends TestCase
         $this->assertTrue(is_string($heading), 'The changelog carries a second-level heading.');
         $this->assertTrue(
             preg_match('/^## [0-9]+\.[0-9]+\.[0-9]+$/', (string) $heading) === 1,
-            'The newest changelog heading is a release record, which release-on-record publishes.',
+            'The newest released changelog heading is the release-on-record version.',
         );
         $release = substr((string) $heading, 3);
 
