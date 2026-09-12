@@ -3,10 +3,9 @@
 **Kumwe Sequence** is the portable document-numbering package of the Kumwe family: the number format, reset
 period and tenancy scope an allocated-number field declares, the storage-neutral allocator port a host
 implements to reserve the next value of one counter, and the one refusal an allocation can answer with. It
-ships no allocator implementation, no storage and no numbering policy. It is extracted from
-[Kumwe App](https://github.com/kumwe/app) as a drop-in replacement, not a mutation: the App adopts this
-package and every consumer behaves exactly as it did against the types the App declared itself, with one
-deliberate correction — the port's refusal is a package-owned error rather than an App record exception.
+ships no allocator implementation, no storage and no numbering policy. The public contract fixes the
+declaration grammar, counter coordinates, rendering and refusal behavior. Core owns database allocation,
+authority, transactions, retries and recovery.
 
 This charter is normative for the repository. A change that contradicts it is a defect, whatever tests it
 passes.
@@ -68,20 +67,18 @@ An adapter that hands out a value outside the caller's transaction, re-uses a nu
 with a guess, or lets a driver's own failure class escape the port has not implemented this contract,
 whatever interface it declares.
 
-## Drop-in mechanics
+## Canonical ownership and compatibility
 
-- **Canonical namespace here.** Every extracted type lives under `Kumwe\Sequence\` in this repository, which
-  is its one canonical home from the first release onward.
-- **Canonical names everywhere.** The App's adoption change migrates every reference — imports, FQCN
-  strings, path lists in architecture tests and documentation — to the canonical names, deletes its copies
-  and retires the historical `Kumwe\App\BusinessDefinition\Domain\NumberSequence*` and
-  `Kumwe\App\BusinessRecord\Application\BusinessNumberSequenceAllocator` names in that same change. No
-  compatibility layer: nothing resolves a retired name, and nothing has to, because no third party was ever
-  published against the historical names. `MIGRATION-HANDOFF.md` is the record of what moved where.
-- **Identity proven, not asserted.** The package suite replays the App's unit corpus for the values and
-  adds the grammar, boundary and contract cases; `resources/public-api/v1.json` records the complete
-  reflected surface, enum cases included, and the lane refuses drift; the App's retained database,
-  contention, validator and composition tests stay green without rewriting before adoption is claimed.
+- Every public type lives under `Kumwe\Sequence\`, its one canonical runtime namespace. Core imports
+  these types and supplies its allocator through the port; no historical namespace alias is supplied.
+- The port uses `NumberSequenceUnavailable`. Core translates it to its own retryable record exception at
+  the application boundary. The reserved organization key `-` is refused to keep counter scopes disjoint.
+- [The release record](docs/release-record.md) preserves historical source and consumer evidence. Review
+  current consumers before replacing implementations. Retain database, contention, validator and
+  composition tests; remove implementation-only duplicates with the implementation they exercised.
+- The public manifest pins every exported member and enum case. Semantic changes require a reviewed
+  successor version and compatibility proof; historical source correspondence does not override the
+  current released contract.
 
 ## The boundary in one line
 

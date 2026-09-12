@@ -26,10 +26,8 @@ The exact per-file adoption and split instructions are recorded in tests/ownersh
 implementation test only when its old production implementation is removed during verified adoption. App retains
 its own integration assertions and does not execute package test files from vendor.
 
-## Release integrity prerequisite
+## Release integrity
 
-The release workflow now refuses all tag/publication mutations unless main is protected and refuses an existing or
-newly published release unless its exact version is immutable, published, stable and non-draft. The 31
-package-owned release-integrity fixtures run in the complete check lane. A maintainer must protect main and enable
-immutable releases before recording the next release; these changes do not modify repository settings, existing
-tags or historical release integrity.
+The package gate retains release parsing, integrity, publication and repository-setup regression tests.
+Normal publication and independent verification are separate from optional administrator hardening.
+Follow [releasing](releasing.md) for source identity, retries, exact pins and downstream evidence.

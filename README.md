@@ -1,5 +1,17 @@
 # Kumwe Sequence
 
+[![Packagist version][version-badge]][package]
+[![CI][ci-badge]][ci]
+[![PHP requirement][php-badge]](composer.json)
+[![License][license-badge]](LICENSE)
+
+[version-badge]: https://img.shields.io/packagist/v/kumwe/sequence
+[package]: https://packagist.org/packages/kumwe/sequence
+[ci-badge]: https://github.com/kumwe/sequence/actions/workflows/ci.yml/badge.svg?branch=main
+[ci]: https://github.com/kumwe/sequence/actions/workflows/ci.yml?query=branch%3Amain
+[php-badge]: https://img.shields.io/packagist/dependency-v/kumwe/sequence/php
+[license-badge]: https://img.shields.io/packagist/l/kumwe/sequence
+
 **Portable numbering format, reset and scope values, and the allocator port. The host reserves the numbers;
 this package says what they mean.**
 
@@ -36,7 +48,7 @@ It does not own, and will refuse:
 ## Installation and supported platforms
 
 ```bash
-composer require kumwe/sequence
+composer require kumwe/sequence:0.2.1
 ```
 
 PHP `^8.5` and nothing else: the runtime requirement is `php` alone, with no extension and no Composer
@@ -166,18 +178,20 @@ values and the exception are final; a new scope or reset case is a reviewed chan
 new version, never a subclass or a host-side copy. A consumer that needs an in-memory allocator for its own
 tests writes one against the port, as the example and the suite do.
 
-## Migration from Kumwe App
+## Core contract and compatibility
 
 `Kumwe\App\BusinessDefinition\Domain\NumberSequenceFormat`, `NumberSequenceReset` and `NumberSequenceScope`
 become `Kumwe\Sequence\Value\NumberSequenceFormat`, `NumberSequenceReset` and `NumberSequenceScope`,
-behaviour unchanged. `Kumwe\App\BusinessRecord\Application\BusinessNumberSequenceAllocator` becomes
+with the reserved-key refusal described below.
+`Kumwe\App\BusinessRecord\Application\BusinessNumberSequenceAllocator` becomes
 `Kumwe\Sequence\Contract\NumberSequenceAllocator` with the same signature and parameter names; its
 `@throws` moves from the App's `BusinessRecordTemporarilyUnavailable` to the package's
 `NumberSequenceUnavailable`, so the App's adapter raises the package refusal and the App's record service
 translates it into its own retryable exception at the port boundary. The Doctrine adapter, the kernel
 binding, the definition validator, the posting-period calendar and every database test stay in the App.
-The complete adoption record, with file-level Phase 2 instructions, is `MIGRATION-HANDOFF.md` in this
-repository.
+The [release record](docs/release-record.md) preserves exact historical source mappings and consumer
+qualification requirements. Review drift against current Core before replacing old types. The reserved
+organization key `-` is rejected as of 0.2.0 to keep organization and site-wide counters disjoint.
 
 ## Testing and clean-consumer commands
 
