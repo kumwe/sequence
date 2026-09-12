@@ -19,12 +19,10 @@ driver, a host, a container or a framework name.
 
 Rules that keep the boundary honest:
 
-1. **The extracted behaviour is the API.** This package is a drop-in replacement for types Kumwe App
-   already declared and every App consumer already composes over. A public shape here matches the shape
-   the App published — the same constants, the same properties, the same method names, parameter names and
-   types, the same messages, the same refusals. The one deliberate correction, the port's refusal type, is
-   recorded in `CHANGELOG.md` and `MIGRATION-HANDOFF.md`. An improvement that moves behaviour is new work
-   with a new version, never part of extraction.
+1. **The released behaviour is the API.** Public constants, properties, methods, parameter names, types,
+   messages and refusals match the documented release. The allocator port uses the package refusal;
+   organization key `-` is rejected to keep scopes disjoint. Compatibility decisions remain in
+   `CHANGELOG.md` and [release evidence](release-record.md). Behavior changes require a reviewed version.
 2. **The values refuse natively.** A declaration outside the grammar, a counter that cannot be named, a
    value that cannot be rendered, is an `InvalidArgumentException`: an argument error a host's validator
    turns into its own publication refusal. The package-owned exception is reserved for the port, where a
@@ -37,7 +35,7 @@ Rules that keep the boundary honest:
 5. **Determinism.** The package reads no clock, no environment and no randomness. A period key is judged in
    the declared zone, never the process default; the suite changes the default zone and proves it.
 6. **One owner, one name.** `Kumwe\Sequence\` is the only namespace. No historical App name survives
-   anywhere in the tree, and the suite refuses one in the manifests and the source.
+   in runtime source or public manifests, and the suite refuses one in the manifests and the source.
 
 ## Code
 
@@ -119,5 +117,5 @@ The public API manifest is the compatibility pin: `composer manifests` regenerat
 refuses any difference, enum cases included. A reviewed change records the new surface with
 `composer manifests:record` and a changelog entry; routine changes never rewrite the evidence to make the
 gate green. A change a consumer must act on is a new major. Newer portable behaviour discovered in a
-consumer after extraction is routed here as a successor release before that consumer adopts it; see
-`MIGRATION-HANDOFF.md`.
+consumer is routed here as a successor release before that consumer adopts it; see
+[the release contract](release-record.md).

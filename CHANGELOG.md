@@ -4,6 +4,14 @@ Delivered package changes, newest first. A change is recorded here only after it
 clean clone. The newest `## X.Y.Z` heading is the release record: a merge to `main` that carries it is the
 release, published by the `Release on record` workflow ([`docs/releasing.md`](docs/releasing.md)).
 
+## Unreleased
+
+### Changed
+
+- Add live package/CI/PHP/license badges and install the current 0.2.1 release explicitly.
+- Replace completed handover prose with current Core and production release contracts.
+- Keep archive/documentation gates aligned with the release record and retain all runtime semantics.
+
 ## 0.2.1
 
 - **Consistent release automation.** Resolve release identity from the tested push commit after a rebase,

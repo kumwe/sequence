@@ -1,4 +1,4 @@
-# Integration: adopting the values and the port in a host
+# Core contract: values and allocation in a host
 
 This document is for the host that owns a store — Kumwe App first — and for any package that types against
 the numbering vocabulary. It says how to install the package, what the host validates at publication, how a
@@ -9,7 +9,7 @@ package.
 ## 1. Install and pin
 
 ```bash
-composer require kumwe/sequence:0.1.0
+composer require kumwe/sequence:0.2.1
 ```
 
 While the package is pre-1.0 the host pins an exact version, never a range, and a re-pin is a deliberate,
